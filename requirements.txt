@@ -1,0 +1,6 @@
+pandas
+nunmpy
+scikit-learn
+flask
+
+-e .
