@@ -1,6 +1,7 @@
 pandas
-nunmpy
+numpy
 scikit-learn
 flask
-
+dill
+pyyaml
 -e .
