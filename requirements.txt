@@ -4,4 +4,8 @@ scikit-learn
 flask
 dill
 pyyaml
+gensim
+tensorflow
+joblib
+nltk
 -e .
