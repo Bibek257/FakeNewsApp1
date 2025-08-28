@@ -50,7 +50,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
-
+myenv/
 # Translations
 *.mo
 *.pot
@@ -159,7 +159,9 @@ myenv/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
+.pkl
+.npy
+.exe
 # Pyre type checker
 .pyre/
 
@@ -206,7 +208,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+/myenv/
 
+/artifacts
 # data and artifacts
 artifacts/
 data/

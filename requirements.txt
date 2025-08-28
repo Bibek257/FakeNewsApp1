@@ -8,4 +8,5 @@ gensim
 tensorflow
 joblib
 nltk
+gensim
 -e .
