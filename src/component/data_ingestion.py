@@ -39,6 +39,8 @@ class DataIngestion:
             # saving the raw data
             df.to_csv(self.ingestion_config.raw_data_dir+"/raw_data.csv", index=False, header=True)
             logging.info("Raw data is saved")
+            # dropping duplicates
+            df = df.drop_duplicates().reset_index(drop=True)
             # saving the train and test data
             train_set, test_set = train_test_split(df, test_size=0.1, random_state=42)
             train_set,val_set = train_test_split(train_set, test_size=0.15, random_state=42)

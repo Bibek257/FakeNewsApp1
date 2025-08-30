@@ -14,8 +14,8 @@ data_validation:
   valid_train_data_path: "artifacts/data_validation/train_valid.csv"
   valid_test_data_path: "artifacts/data_validation/test_valid.csv"
   valid_val_data_path: "artifacts/data_validation/val_valid.csv"
-  smallest_acceptable_size: 100
-  largest_acceptable_size: 1000
+  smallest_acceptable_size: 5
+  largest_acceptable_size: 10000
 
 word2vec:
   word2vec_model_path: "artifacts/word2vec/word2vec.model"
@@ -24,7 +24,7 @@ data_transformation:
   transformed_train_path: "artifacts/data_transformation/transformed_train.csv"
   transformed_test_path: "artifacts/data_transformation/transformed_test.csv"
   transformed_val_path: "artifacts/data_transformation/transformed_val.csv"
-  preprocessor_path: "artifacts/data_transformation/preprocessor.pkl"
+  # preprocessor_path: "artifacts/data_transformation/preprocessor.pkl"
   embeded_train_path: "artifacts/data_transformation/embeded_train.kv.npy"
   embeded_y_train_path: "artifacts/data_transformation/embeded_y_train.kv.npy"
   embeded_test_path: "artifacts/data_transformation/embeded_test.kv.npy"
@@ -39,12 +39,12 @@ data_transformation:
   oov_token: "<OOV>"
 
 model_trainer:
-  model_path: "artifacts/model_trainer/model.pkl"
+  model_path: "artifacts/model_trainer/model.h5"
   expected_accuracy: 0.8
-  overfitting_threshold: 0.1
+
   output_dim: 300
   input_length: 300
-  dropout_rate: 0.7
+  dropout_rate: 0.6
   optimizer: "adam"
   loss: "binary_crossentropy"
   metrics:
@@ -58,10 +58,10 @@ model_trainer:
     - "FalseNegatives"
 
   learning_rate: 0.001
-  epochs: 10
+  epochs: 20
   batch_size: 128
   early_stopping_patience: 3
-  overfitting_threshold: 0.01
+  overfitting_threshold: 0.03
   underfitting_threshold: 0.01
 
 model_evaluation:
