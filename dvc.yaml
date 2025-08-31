@@ -1,0 +1,68 @@
+stages:
+  data_ingestion:
+    cmd: python src/components/data_ingestion.py
+    deps:
+      - src/components/data_ingestion.py
+      - src/utils/common.py
+      - src/utils/configuration.py
+      - config/urls_config.yaml
+    outs:
+      - artifacts/data_ingestion/raw_data.csv
+      - artifacts/data_ingestion/train.csv
+      - artifacts/data_ingestion/test.csv
+      - artifacts/data_ingestion/val_data.csv
+
+  data_transformation:
+    cmd: python src/components/data_transformation.py
+    deps:
+      - src/components/data_transformation.py
+      - src/utils/common.py
+      - src/utils/configuration.py
+      - config/urls_config.yaml
+      - artifacts/data_ingestion/train.csv
+      - artifacts/data_ingestion/test.csv
+      - artifacts/data_ingestion/val_data.csv
+    outs:
+      - artifacts/data_transformation/transformed_train.csv
+      - artifacts/data_transformation/transformed_test.csv
+      - artifacts/data_transformation/transformed_val.csv
+      - artifacts/data_transformation/embeded_train.kv.npy
+      - artifacts/data_transformation/embeded_y_train.kv.npy
+      - artifacts/data_transformation/embeded_test.kv.npy
+      - artifacts/data_transformation/embeded_y_test.kv.npy
+      - artifacts/data_transformation/embeded_val.kv.npy
+      - artifacts/data_transformation/embeded_y_val.kv.npy
+      - artifacts/transformer/preprocessor.pkl
+
+  model_trainer:
+    cmd: python src/components/model_trainer.py
+    deps:
+      - src/components/model_trainer.py
+      - src/utils/common.py
+      - src/utils/configuration.py
+      - config/urls_config.yaml
+      - artifacts/data_transformation/embeded_train.kv.npy
+      - artifacts/data_transformation/embeded_y_train.kv.npy
+      - artifacts/data_transformation/embeded_test.kv.npy
+      - artifacts/data_transformation/embeded_y_test.kv.npy
+      - artifacts/data_transformation/embeded_val.kv.npy
+      - artifacts/data_transformation/embeded_y_val.kv.npy
+      - artifacts/transformer/preprocessor.pkl
+    outs:
+      - artifacts/model_trainer/model.h5
+
+  model_evaluation:
+    cmd: python src/components/model_evaluation.py
+    deps:
+      - src/components/model_evaluation.py
+      - src/utils/common.py
+      - src/utils/configuration.py
+      - config/urls_config.yaml
+      - artifacts/model_trainer/model.h5
+      - artifacts/data_transformation/embeded_test.kv.npy
+      - artifacts/data_transformation/embeded_y_test.kv.npy
+      - artifacts/data_transformation/embeded_val.kv.npy
+      - artifacts/data_transformation/embeded_y_val.kv.npy
+      - artifacts/transformer/preprocessor.pkl
+    outs:
+      - artifacts/model_evaluation/evaluation_report.yaml
