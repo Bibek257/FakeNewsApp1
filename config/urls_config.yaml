@@ -31,7 +31,7 @@ data_transformation:
   embeded_y_test_path: "artifacts/data_transformation/embeded_y_test.kv.npy"
   embeded_val_path: "artifacts/data_transformation/embeded_val.kv.npy"
   embeded_y_val_path: "artifacts/data_transformation/embeded_y_val.kv.npy"
-  preprocessed_object_path: "transformer/preprocessor.pkl"
+  preprocessed_object_path: "artifacts/transformer/preprocessor.pkl"
   max_sequence_length: 300
   embeding_dimension: 300
   padding_type: "post"
