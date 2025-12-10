@@ -1,10 +1,9 @@
 stages:
   data_ingestion:
-    cmd: python src/components/data_ingestion.py
+    cmd: python src/component/data_ingestion.py
     deps:
-      - src/components/data_ingestion.py
-      - src/utils/common.py
-      - src/utils/configuration.py
+      - src/component/data_ingestion.py
+      - src/utils.py
       - config/urls_config.yaml
     outs:
       - artifacts/data_ingestion/raw_data.csv
@@ -12,20 +11,42 @@ stages:
       - artifacts/data_ingestion/test.csv
       - artifacts/data_ingestion/val_data.csv
 
-  data_transformation:
-    cmd: python src/components/data_transformation.py
+  data_validation:
+    cmd: python src/component/data_validation.py
     deps:
-      - src/components/data_transformation.py
-      - src/utils/common.py
-      - src/utils/configuration.py
+      - src/component/data_validation.py
+      - src/utils.py
       - config/urls_config.yaml
       - artifacts/data_ingestion/train.csv
       - artifacts/data_ingestion/test.csv
       - artifacts/data_ingestion/val_data.csv
     outs:
-      - artifacts/data_transformation/transformed_train.csv
-      - artifacts/data_transformation/transformed_test.csv
-      - artifacts/data_transformation/transformed_val.csv
+      - artifacts/data_validation/train_valid.csv
+      - artifacts/data_validation/test_valid.csv
+      - artifacts/data_validation/val_valid.csv
+
+  word2vec:
+    cmd: python src/component/word2vec.py
+    deps:
+      - src/component/word2vec.py
+      - src/utils.py
+      - config/urls_config.yaml
+      - artifacts/data_validation/train_valid.csv
+      - artifacts/data_validation/test_valid.csv
+      - artifacts/data_validation/val_valid.csv
+    outs:
+      - artifacts/word2vec/word2vec.model
+
+  data_transformation:
+    cmd: python src/component/data_transformation.py
+    deps:
+      - src/component/data_transformation.py
+      - src/utils.py
+      - config/urls_config.yaml
+      - artifacts/data_ingestion/train.csv
+      - artifacts/data_ingestion/test.csv
+      - artifacts/data_ingestion/val_data.csv
+    outs:
       - artifacts/data_transformation/embeded_train.kv.npy
       - artifacts/data_transformation/embeded_y_train.kv.npy
       - artifacts/data_transformation/embeded_test.kv.npy
@@ -35,11 +56,10 @@ stages:
       - artifacts/transformer/preprocessor.pkl
 
   model_trainer:
-    cmd: python src/components/model_trainer.py
+    cmd: python src/component/model_trainer.py
     deps:
-      - src/components/model_trainer.py
-      - src/utils/common.py
-      - src/utils/configuration.py
+      - src/component/model_trainer.py
+      - src/utils.py
       - config/urls_config.yaml
       - artifacts/data_transformation/embeded_train.kv.npy
       - artifacts/data_transformation/embeded_y_train.kv.npy
@@ -52,11 +72,10 @@ stages:
       - artifacts/model_trainer/model.h5
 
   model_evaluation:
-    cmd: python src/components/model_evaluation.py
+    cmd: python src/component/model_evaluation.py
     deps:
-      - src/components/model_evaluation.py
-      - src/utils/common.py
-      - src/utils/configuration.py
+      - src/component/model_evaluation.py
+      - src/utils.py
       - config/urls_config.yaml
       - artifacts/model_trainer/model.h5
       - artifacts/data_transformation/embeded_test.kv.npy

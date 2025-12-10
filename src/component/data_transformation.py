@@ -23,7 +23,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 class DataTransformationConfig:
     def __post_init__(self):
         config = read_yaml("config/urls_config.yaml")
-        self.preprocessed_object_file_path = "transformer/preprocessor.pkl"
+        self.preprocessed_object_path = config["data_transformation"]["preprocessed_object_path"]
         self.valid_train_data_path = config["data_validation"]["valid_train_data_path"]
         self.valid_test_data_path = config["data_validation"]["valid_test_data_path"]
         self.valid_val_data_path = config["data_validation"]["valid_val_data_path"]
@@ -132,7 +132,8 @@ class DataTransformation:
                 "max_sequence_length": self.config.max_sequence_length,
                 "embedding_matrix": self.create_embedding_matrix()
             }
-            joblib.dump(preprocessor_obj, self.config.preprocessed_object_file_path)
+            os.makedirs(os.path.dirname(self.config.preprocessed_object_path), exist_ok=True)
+            joblib.dump(preprocessor_obj, self.config.preprocessed_object_path)
             logging.info("Preprocessor.pkl saved successfully.")
 
             logging.info("Data transformation completed successfully.")

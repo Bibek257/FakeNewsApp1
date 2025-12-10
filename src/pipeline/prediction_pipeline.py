@@ -37,6 +37,7 @@ class PredictionPipeline:
             raise CustomException(e, sys)
 
     def load_model(self):
+
         try:
             if not self.model:
                 self.model = load_model(self.config.model_path)
@@ -71,9 +72,9 @@ class PredictionPipeline:
         try:
             processed_text = self.preprocess_text(text)
             self.load_model()
-            prob_real = float(self.model.predict(processed_text)[0][0])
-            prob_fake = 1 - prob_real
-            label = int(prob_real > 0.3)  # Using 0.3 as threshold for real news
+            prob_fake = float(self.model.predict(processed_text)[0][0])
+            prob_real = 1 - prob_fake
+            label = int(prob_real > 0.5)  # Using 0.6 as threshold for real news
             # Return label, fake confidence %, real confidence %
             return label, prob_fake * 100, prob_real * 100
         except Exception as e:

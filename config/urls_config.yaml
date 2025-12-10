@@ -63,7 +63,6 @@ model_trainer:
   early_stopping_patience: 3
   overfitting_threshold: 0.03
   underfitting_threshold: 0.01
-
 model_evaluation:
   model_evaluation_file_path: "artifacts/model_evaluation/evaluation_report.yaml"
   change_threshold: 0.01
@@ -74,3 +73,5 @@ model_pusher:
   raw_data_file_name: "raw_data.csv"
   train_data_file_name: "train.csv"
   test_data_file_name: "test.csv"
+
+ai_agent: news_api_key:"1df3c637e4224650b4fdbb3ae2058467"

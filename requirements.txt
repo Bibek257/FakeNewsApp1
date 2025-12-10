@@ -9,4 +9,6 @@ tensorflow
 joblib
 nltk
 gensim
+requests
+
 -e .

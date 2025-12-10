@@ -4,12 +4,18 @@ from flask import Flask, request, render_template
 from src.exception import CustomException
 from src.pipeline.prediction_pipeline import PredictionPipeline
 from src.logger import logging
-
+# from src.agents.ai_agents import AIAgent   # ✅ Import class, not function
+# from google.protobuf import message_factory as mf
+# if not hasattr(mf.MessageFactory, 'GetPrototype'):
+    # mf.MessageFactory.GetPrototype = mf.MessageFactory.GetMessageClass
 # Initialize Flask app
 app = Flask(__name__)
 
 # Initialize PredictionPipeline once
 predictor = PredictionPipeline()
+
+#Initialize AI Agent once (loads sentence-transformer only once)
+# agent = AIAgent()
 
 @app.route("/", methods=["GET"])
 def home() -> str:
@@ -41,8 +47,16 @@ def predict() -> str:
             result = "Fake News"
             confidence = f"{conf_fake:.2f}% confident"
 
+        # ✅ Call the agent’s search method
+        # related_articles = agent.search(news_text)
+
         logging.info(f"Prediction result: {result}, Confidence: {confidence}")
-        return render_template("index.html", prediction=result, confidence=confidence)
+        return render_template(
+            "index.html",
+            prediction=result,
+            confidence=confidence
+            # related_articles=related_articles
+        )
 
     except Exception as e:
         logging.error(f"Error during prediction: {e}", exc_info=True)
@@ -79,3 +93,5 @@ def predict_batch() -> str:
 # Run the Flask app
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
+    

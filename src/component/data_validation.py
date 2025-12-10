@@ -27,36 +27,6 @@ class DataValidation:
     def __init__(self):
         self.data_validation_config = DataValidationConfig()
     
-   
-    def validate_shape(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-            Validate dataframe by dropping rows where text has too few words.
-            Logs number of rows dropped.
-        """
-        try:
-            min_words = self.data_validation_config.smallest_acceptable_size
-            
-            # Count words in each text
-            df['word_count'] = df['text'].str.split().apply(len)
-            
-            # Identify rows with too few words
-            small_rows = df[df['word_count'] < min_words]
-            n_dropped = small_rows.shape[0]
-
-            if n_dropped > 0:
-                logging.info(f"Dropped {n_dropped} rows with text having fewer than {min_words} words")
-                df = df[df['word_count'] >= min_words]
-
-            # Drop the helper column
-            df.drop(columns=['word_count'], inplace=True)
-
-            return df
-
-        except Exception as e:
-            raise CustomException(e, sys)
-    
-    
-
         
     def validate_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -126,17 +96,17 @@ class DataValidation:
             # Validate datasets
             train_df = self.validate_missing_values(train_df)
             train_df = self.check_duplicates(train_df)
-            train_df = self.validate_shape(train_df)
+            
             train_df = self.validate_labels(train_df)
 
             test_df = self.validate_missing_values(test_df)
             test_df = self.check_duplicates(test_df)
-            test_df = self.validate_shape(test_df)
+           
             test_df = self.validate_labels(test_df)
 
             val_df = self.validate_missing_values(val_df)
             val_df = self.check_duplicates(val_df)
-            val_df = self.validate_shape(val_df)
+            
             val_df = self.validate_labels(val_df)
 
             # Save valid and invalid data
